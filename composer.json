@@ -41,14 +41,14 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "v0.0.1-dev"
+            "dev-main": "v0.0.1-dev"
         },
         "laravel": {
             "providers": [
                 "Vietstars\\DevDebugger\\ServiceProvider"
             ],
             "aliases": {
-                "debugger": "Vietstars\\DevDebugger\\Facades\\DevDebugger"
+                "Debug": "Vietstars\\DevDebugger\\Facades\\DevDebugger"
             }
         }
     },
