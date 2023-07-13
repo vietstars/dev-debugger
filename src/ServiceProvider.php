@@ -81,7 +81,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                     public function register($engine, \Closure $resolver)
                     {
                         parent::register($engine, function () use ($resolver) {
-                            return new DebugbarViewEngine($resolver(), $this->devDebugger);
+                            return new DebuggerViewEngine($resolver(), $this->devDebugger);
                         });
                     }
                 };
