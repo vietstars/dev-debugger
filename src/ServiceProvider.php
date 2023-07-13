@@ -104,7 +104,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $configPath = __DIR__ . '/../config/DevDebugger.php';
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
-        $this->loadRoutesFrom(realpath(__DIR__ . '/debugbar-routes.php'));
+        $this->loadRoutesFrom(realpath(__DIR__ . '/debugger-routes.php'));
 
         $this->registerMiddleware(InjectDebugbar::class);
 
