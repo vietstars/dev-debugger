@@ -129,8 +129,8 @@ class DevDebugger extends DebugBar
             return;
         }
 
-        /** @var \Barryvdh\Debugbar\LaravelDebugbar $debugbar */
-        $debugbar = $this;
+        /** @var \Vietstars\DevDebugger\DevDebugger $debugger */
+        $debugger = $this;
 
         /** @var Application $app */
         $app = $this->app;
@@ -140,7 +140,7 @@ class DevDebugger extends DebugBar
             set_error_handler([$this, 'handleError']);
         }
 
-        $this->selectStorage($debugbar);
+        $this->selectStorage($debugger);
 
         if ($this->shouldCollect('phpinfo', true)) {
             $this->addCollector(new PhpInfoCollector());
@@ -156,13 +156,13 @@ class DevDebugger extends DebugBar
 
             if (! $this->isLumen() && $startTime) {
                 $this->app->booted(
-                    function () use ($debugbar, $startTime) {
-                        $debugbar['time']->addMeasure('Booting', $startTime, microtime(true));
+                    function () use ($debugger, $startTime) {
+                        $debugger['time']->addMeasure('Booting', $startTime, microtime(true));
                     }
                 );
             }
 
-            $debugbar->startMeasure('application', 'Application');
+            $debugger->startMeasure('application', 'Application');
         }
 
         if ($this->shouldCollect('memory', true)) {
@@ -197,7 +197,7 @@ class DevDebugger extends DebugBar
             } catch (\Exception $e) {
                 $this->addThrowable(
                     new Exception(
-                        'Cannot add EventCollector to Laravel Debugbar: ' . $e->getMessage(),
+                        'Cannot add EventCollector to Dev Debugger: ' . $e->getMessage(),
                         $e->getCode(),
                         $e
                     )
@@ -212,17 +212,17 @@ class DevDebugger extends DebugBar
                 $this->addCollector(new ViewCollector($collectData, $excludePaths));
                 $this->app['events']->listen(
                     'composing:*',
-                    function ($view, $data = []) use ($debugbar) {
+                    function ($view, $data = []) use ($debugger) {
                         if ($data) {
                             $view = $data[0]; // For Laravel >= 5.4
                         }
-                        $debugbar['views']->addView($view);
+                        $debugger['views']->addView($view);
                     }
                 );
             } catch (\Exception $e) {
                 $this->addThrowable(
                     new Exception(
-                        'Cannot add ViewCollector to Laravel Debugbar: ' . $e->getMessage(),
+                        'Cannot add ViewCollector to Dev Debugger: ' . $e->getMessage(),
                         $e->getCode(),
                         $e
                     )
@@ -232,11 +232,11 @@ class DevDebugger extends DebugBar
 
         if (!$this->isLumen() && $this->shouldCollect('route')) {
             try {
-                $this->addCollector($this->app->make('Barryvdh\Debugbar\DataCollector\RouteCollector'));
+                $this->addCollector($this->app->make('Vietstars\DevDebugger\DataCollector\RouteCollector'));
             } catch (\Exception $e) {
                 $this->addThrowable(
                     new Exception(
-                        'Cannot add RouteCollector to Laravel Debugbar: ' . $e->getMessage(),
+                        'Cannot add RouteCollector to Dev Debugger: ' . $e->getMessage(),
                         $e->getCode(),
                         $e
                     )
@@ -294,12 +294,12 @@ class DevDebugger extends DebugBar
         if ($this->shouldCollect('db', true) && isset($this->app['db'])) {
             $db = $this->app['db'];
             if (
-                $debugbar->hasCollector('time') && $this->app['config']->get(
+                $debugger->hasCollector('time') && $this->app['config']->get(
                     'debugbar.options.db.timeline',
                     false
                 )
             ) {
-                $timeCollector = $debugbar->getCollector('time');
+                $timeCollector = $debugger->getCollector('time');
             } else {
                 $timeCollector = null;
             }
@@ -469,7 +469,7 @@ class DevDebugger extends DebugBar
             } catch (\Exception $e) {
                 $this->addThrowable(
                     new Exception(
-                        'Cannot add MailCollector to Laravel Debugbar: ' . $e->getMessage(),
+                        'Cannot add MailCollector to Dev Debugger: ' . $e->getMessage(),
                         $e->getCode(),
                         $e
                     )
@@ -1081,9 +1081,9 @@ class DevDebugger extends DebugBar
     }
 
     /**
-     * @param DebugBar $debugbar
+     * @param DebugBar $debugger
      */
-    protected function selectStorage(DebugBar $debugbar)
+    protected function selectStorage(DebugBar $debugger)
     {
         $config = $this->app['config'];
         if ($config->get('debugbar.storage.enabled')) {
@@ -1120,7 +1120,7 @@ class DevDebugger extends DebugBar
                     break;
             }
 
-            $debugbar->setStorage($storage);
+            $debugger->setStorage($storage);
         }
     }
 
@@ -1172,3 +1172,4 @@ class DevDebugger extends DebugBar
         return $logger;
     }
 }
+
